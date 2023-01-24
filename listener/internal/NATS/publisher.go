@@ -19,8 +19,10 @@ func NewMsgHandler() *MsgHandler {
 }
 
 func (m *MsgHandler) Handle(msg []byte) {
-	log.Printf("publishing to MQ: %s", string(msg))
+	log.Printf("publishing to MQ every 3 seconds to simulate data in real-time: %s", string(msg))
+
 	m.NatsClient.Publish(m.Topic, msg)
+
 }
 
 func ConnectMQ() *nats.Conn {

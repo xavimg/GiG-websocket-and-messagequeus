@@ -5,9 +5,6 @@ import (
 	"listener-service/internal/websocket"
 )
 
-type Config struct {
-}
-
 type Service struct {
 	MsgHandler *NATS.MsgHandler
 	WS         *websocket.WS

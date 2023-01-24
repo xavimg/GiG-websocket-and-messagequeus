@@ -26,7 +26,7 @@ func (ws *WS) ServeHTTP() {
 		WriteBufferSize: 1024,
 	}
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/publisher", func(w http.ResponseWriter, r *http.Request) {
 		websocket, err := upgrader.Upgrade(w, r, nil)
 		if err != nil {
 			log.Println("http upgrades to websocket connection error: %w", err)
@@ -35,8 +35,8 @@ func (ws *WS) ServeHTTP() {
 		ws.listenWS(websocket)
 	})
 
-	log.Println("Server start on 8080")
-	http.ListenAndServe(":8080", nil)
+	log.Println("Server start on 8085")
+	http.ListenAndServe(":8085", nil)
 }
 
 func (ws *WS) listenWS(conn *websocket.Conn) {

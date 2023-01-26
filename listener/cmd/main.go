@@ -1,13 +1,13 @@
 package main
 
 import (
-	"listener-service/internal/NATS"
-	"listener-service/internal/websocket"
+	"listener-service/internal/nats"
+	"listener-service/internal/server"
 )
 
 type Service struct {
-	MsgHandler *NATS.MsgHandler
-	WS         *websocket.WS
+	MsgHandler *nats.MsgHandler
+	WS         *server.WS
 }
 
 // Entry point of the service
@@ -23,8 +23,8 @@ func (s *Service) Run() error {
 }
 
 func main() {
-	ws := websocket.NewWS()
-	msgHandler := NATS.NewMsgHandler()
+	ws := server.NewWS()
+	msgHandler := nats.NewMsgHandler()
 
 	service := Service{
 		WS:         ws,

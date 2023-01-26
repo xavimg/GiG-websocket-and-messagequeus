@@ -1,4 +1,4 @@
-package websocket
+package server
 
 import (
 	"fmt"
@@ -26,17 +26,17 @@ func (ws *WS) ServeHTTP() {
 		WriteBufferSize: 1024,
 	}
 
-	http.HandleFunc("/publisher", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		websocket, err := upgrader.Upgrade(w, r, nil)
 		if err != nil {
-			log.Println("http upgrades to websocket connection error: %w", err)
+			log.Println("websocket connection upgrade: %w", err)
 		}
-		log.Printf("client from %s connected throught WS ", r.RemoteAddr)
+		log.Println("ws connected!")
 		ws.listenWS(websocket)
 	})
 
-	log.Println("Server start on 8085")
-	http.ListenAndServe(":8085", nil)
+	log.Println("http listen on 3010")
+	http.ListenAndServe(":3010", nil)
 }
 
 func (ws *WS) listenWS(conn *websocket.Conn) {

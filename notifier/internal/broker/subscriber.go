@@ -1,4 +1,4 @@
-package NATS
+package broker
 
 import (
 	"log"

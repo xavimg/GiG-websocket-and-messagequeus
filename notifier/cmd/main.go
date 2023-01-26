@@ -3,18 +3,15 @@ package main
 import (
 	"log"
 
-	"notifier-service/internal/NATS"
-	"notifier-service/internal/websocket"
+	"notifier-service/internal/broker"
+	"notifier-service/internal/server"
 
 	"github.com/nats-io/nats.go"
 )
 
-type Config struct {
-}
-
 type Service struct {
-	WSPublisher  *websocket.WSPublisher
-	MQSubscriber *NATS.MQSubscriber
+	WSPublisher  *server.WSPublisher
+	MQSubscriber *broker.MQSubscriber
 }
 
 // Entry point of the service
@@ -34,8 +31,8 @@ func (s *Service) Run() error {
 }
 
 func main() {
-	ws := websocket.NewWSPublisher()
-	mq := NATS.NewMQSubsc(nats.DefaultURL)
+	ws := server.NewWSPublisher()
+	mq := broker.NewMQSubsc(nats.DefaultURL)
 
 	service := Service{
 		MQSubscriber: mq,

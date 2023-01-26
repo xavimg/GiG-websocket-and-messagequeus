@@ -1,4 +1,4 @@
-package websocket
+package server
 
 import (
 	"log"
@@ -7,16 +7,16 @@ import (
 	"github.com/gorilla/websocket"
 )
 
+type WSPublisher struct {
+	WSPubCh   chan []byte
+	WSClients []*websocket.Conn
+}
+
 func NewWSPublisher() *WSPublisher {
 	wsch := make(chan []byte, 64)
 	return &WSPublisher{
 		WSPubCh: wsch,
 	}
-}
-
-type WSPublisher struct {
-	WSPubCh   chan []byte
-	WSClients []*websocket.Conn
 }
 
 func (wsp *WSPublisher) ServeHTTP() {
@@ -32,22 +32,22 @@ func (wsp *WSPublisher) ServeHTTP() {
 		}
 		log.Printf("ws client %v connected!\n", websocket.LocalAddr().String())
 		wsp.WSClients = append(wsp.WSClients, websocket)
-
 	})
 
-	log.Println("http listen on 8081")
-	http.ListenAndServe(":8081", nil)
+	log.Println("http listen on 3011")
+	http.ListenAndServe(":3011", nil)
 }
 
 func (wsp *WSPublisher) HandleWS() {
 	// send payload to the channel
-	messageContent := <-wsp.WSPubCh
+	for msgPayload := range wsp.WSPubCh {
 
-	for i, client := range wsp.WSClients {
-		if err := client.WriteMessage(websocket.TextMessage, messageContent); err != nil {
-			log.Println(err)
-			wsp.removeWSClient(i)
-			_ = client.Close()
+		for i, client := range wsp.WSClients {
+			if err := client.WriteMessage(websocket.TextMessage, msgPayload); err != nil {
+				log.Println(err)
+				wsp.removeWSClient(i)
+				_ = client.Close()
+			}
 		}
 	}
 }

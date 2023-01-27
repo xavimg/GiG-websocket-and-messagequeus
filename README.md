@@ -36,7 +36,8 @@ Run this docker-compose command:
 
 I use wscat to represent clients connected to websocket protocol.
 In one terminal **wscat -c localhost:3010** to connect with service listener throught websocket connection for send messages.
-In other 2 terminals **wscat -c localhost:3011** to connectwith service notifier throught websocket connection for receive messages.
+In other 2 terminals **wscat -c localhost:3011** to connect with service notifier throught websocket connection for receive messages.
+Inter-communication between 2 services is done throught NATS with publish-subscribe message distribution model for one-to-many communication.
 
 ![demo](demo.png)
 

@@ -29,11 +29,3 @@ func (m *MsgHandler) Handle(msg []byte) {
 	log.Printf("publishing message to mq: %s", string(msg))
 	m.Nats.Publish(m.Topic, msg)
 }
-
-func ConnectMQ() *nats.Conn {
-	nc, err := nats.Connect(nats.DefaultURL)
-	if err != nil {
-		panic(err)
-	}
-	return nc
-}

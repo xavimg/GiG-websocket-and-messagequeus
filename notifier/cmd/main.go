@@ -5,8 +5,6 @@ import (
 
 	"notifier-service/internal/broker"
 	"notifier-service/internal/server"
-
-	"github.com/nats-io/nats.go"
 )
 
 type Service struct {
@@ -24,7 +22,7 @@ func (s *Service) Run() error {
 	for {
 		select {
 		case msg := <-s.MQSubscriber.MQSCh:
-			log.Println("received message: ", msg)
+			log.Println("message through the message queue: ", string(msg.Data))
 			s.WSPublisher.WSPubCh <- msg.Data
 		}
 	}
@@ -32,7 +30,7 @@ func (s *Service) Run() error {
 
 func main() {
 	ws := server.NewWSPublisher()
-	mq := broker.NewMQSubsc(nats.DefaultURL)
+	mq := broker.NewMQSubsc("nats://nats:4222")
 
 	service := Service{
 		MQSubscriber: mq,

@@ -46,7 +46,8 @@ func (wsp *WSPublisher) HandleWS() {
 			if err := client.WriteMessage(websocket.TextMessage, msgPayload); err != nil {
 				log.Println(err)
 				wsp.removeWSClient(i)
-				_ = client.Close()
+				err = client.Close()
+				log.Println(err)
 			}
 		}
 	}

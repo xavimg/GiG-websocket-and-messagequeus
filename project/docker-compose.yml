@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+
+  notifier-service:
+    build:
+      context: ./../notifier
+      dockerfile: ./../notifier/Dockerfile
+    ports:
+      - "3011:3011"
+    networks:
+      - my_network
+  
+  listener-service:
+    build:
+      context: ./../listener
+      dockerfile: ./../listener/Dockerfile
+    ports:
+      - "3010:3010"
+    networks:
+      - my_network
+  
+  nats:
+    image: nats
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+    networks:
+      - my_network
+
+networks:
+  my_network:
+    driver: bridge

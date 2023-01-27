@@ -7,27 +7,27 @@ import (
 )
 
 type MQSubscriber struct {
+	Nats  *nats.Conn
 	MQSCh chan *nats.Msg
-	conn  *nats.Conn
 }
 
-func NewMQSubsc(url string) *MQSubscriber {
+func NewMQSubsc(natsURL string) *MQSubscriber {
 	// Connect to a server
-	nc, err := nats.Connect(url)
+	nc, err := nats.Connect(natsURL)
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Printf("Connected to NATS Server: %s\n", url)
+	log.Printf("Connected to NATS Server: %s\n", natsURL)
 
 	mqch := make(chan *nats.Msg)
 	return &MQSubscriber{
+		Nats:  nc,
 		MQSCh: mqch,
-		conn:  nc,
 	}
 }
 
 func (mqs *MQSubscriber) Subscribe(topic string) *nats.Subscription {
-	sub, err := mqs.conn.ChanSubscribe(topic, mqs.MQSCh)
+	sub, err := mqs.Nats.ChanSubscribe(topic, mqs.MQSCh)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -37,5 +37,5 @@ func (mqs *MQSubscriber) Subscribe(topic string) *nats.Subscription {
 
 func (mqs *MQSubscriber) Unsubscribe(sub *nats.Subscription) {
 	_ = sub.Unsubscribe()
-	mqs.conn.Close()
+	mqs.Nats.Close()
 }

@@ -7,20 +7,27 @@ import (
 )
 
 type MsgHandler struct {
-	NatsClient *nats.Conn
-	Topic      string
+	Nats  *nats.Conn
+	Topic string
 }
 
-func NewMsgHandler() *MsgHandler {
+func NewMsgHandler(natsURL string) *MsgHandler {
+	// Connect to a server
+	nc, err := nats.Connect(natsURL)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Printf("Connected to NATS Server: %s\n", natsURL)
+
 	return &MsgHandler{
-		NatsClient: ConnectMQ(),
-		Topic:      "Test",
+		Nats:  nc,
+		Topic: "Test",
 	}
 }
 
 func (m *MsgHandler) Handle(msg []byte) {
 	log.Printf("publishing message to mq: %s", string(msg))
-	m.NatsClient.Publish(m.Topic, msg)
+	m.Nats.Publish(m.Topic, msg)
 }
 
 func ConnectMQ() *nats.Conn {

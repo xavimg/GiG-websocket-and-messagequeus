@@ -24,7 +24,7 @@ func (s *Service) Run() error {
 
 func main() {
 	ws := server.NewWS()
-	msgHandler := nats.NewMsgHandler()
+	msgHandler := nats.NewMsgHandler("nats://nats:4222")
 
 	service := Service{
 		WS:         ws,

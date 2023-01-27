@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"notifier-service/internal/nats"
-	"notifier-service/internal/server"
+	"gig-websockets-messagequeue/notifier/internal/nats"
+	"gig-websockets-messagequeue/notifier/internal/server"
 )
 
 type Service struct {

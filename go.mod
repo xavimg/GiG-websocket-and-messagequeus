@@ -1,4 +1,4 @@
-module notifier-service
+module gig-websockets-messagequeue
 
 go 1.19
 

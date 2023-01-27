@@ -1,16 +1,11 @@
-FROM golang:1.19.2-alpine AS builder
+FROM golang:1.19.2-alpine
 
 WORKDIR /listener
 
 # current directory to /app
 COPY . .
 
-RUN go build -o main cmd/main.go
-
-# Run stage
-FROM alpine
-WORKDIR /listener
-COPY --from=builder /listener/main .
+RUN go build -o main listener/cmd/main.go
 
 EXPOSE 8081
 

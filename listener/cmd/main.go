@@ -1,8 +1,8 @@
 package main
 
 import (
-	"listener-service/internal/nats"
-	"listener-service/internal/server"
+	"gig-websockets-messagequeue/listener/internal/nats"
+	"gig-websockets-messagequeue/listener/internal/server"
 )
 
 type Service struct {

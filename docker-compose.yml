@@ -4,8 +4,8 @@ services:
 
   notifier-service:
     build:
-      context: ./../notifier
-      dockerfile: ./../notifier/Dockerfile
+      context: .
+      dockerfile: notifier/Dockerfile
     ports:
       - "3011:3011"
     networks:
@@ -13,8 +13,8 @@ services:
   
   listener-service:
     build:
-      context: ./../listener
-      dockerfile: ./../listener/Dockerfile
+      context: .
+      dockerfile: listener/Dockerfile
     ports:
       - "3010:3010"
     networks:

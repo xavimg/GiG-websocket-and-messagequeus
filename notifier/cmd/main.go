@@ -3,13 +3,13 @@ package main
 import (
 	"log"
 
-	"notifier-service/internal/broker"
+	"notifier-service/internal/nats"
 	"notifier-service/internal/server"
 )
 
 type Service struct {
 	WSPublisher  *server.WSPublisher
-	MQSubscriber *broker.MQSubscriber
+	MQSubscriber *nats.MQSubscriber
 }
 
 // Entry point of the service
@@ -30,7 +30,7 @@ func (s *Service) Run() error {
 
 func main() {
 	ws := server.NewWSPublisher()
-	mq := broker.NewMQSubsc("nats://nats:4222")
+	mq := nats.NewMQSubsc("nats://nats:4222")
 
 	service := Service{
 		MQSubscriber: mq,

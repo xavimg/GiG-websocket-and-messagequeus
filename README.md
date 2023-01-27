@@ -32,3 +32,7 @@ Run this docker-compose command:
 
 ![diagram](diagram.png)
 
+## Demo
+
+![demo](demo.png)
+

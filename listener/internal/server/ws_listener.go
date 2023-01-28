@@ -44,7 +44,6 @@ func (ws *WS) ServeHTTP() {
 
 func (ws *WS) listenWS(conn *websocket.Conn) {
 	for {
-		// read a message
 		messageType, messageContent, err := conn.ReadMessage()
 		timeReceive := time.Now()
 		if err != nil {
@@ -52,10 +51,8 @@ func (ws *WS) listenWS(conn *websocket.Conn) {
 			return
 		}
 
-		// send payload to the channel
 		ws.WSCh <- messageContent
 
-		// reponse message
 		messageResponse := fmt.Sprintf("Your message is: %s. Time received : %v", messageContent, timeReceive)
 
 		if err := conn.WriteMessage(messageType, []byte(messageResponse)); err != nil {

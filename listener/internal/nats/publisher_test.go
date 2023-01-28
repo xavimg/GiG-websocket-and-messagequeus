@@ -99,7 +99,7 @@ func TestPublishTopicExist(t *testing.T) {
 	require.Equal(t, topic, msg.Subject)
 }
 
-func TestPublishWrongTopicNotExists(t *testing.T) {
+func TestPublisTopicNotExists(t *testing.T) {
 	go RunServerOnPort(TEST_PORT)
 
 	nc, err := nats.Connect("nats://localhost:8369")

@@ -21,6 +21,14 @@ Run this Makefile command:
   make run
 ```
 
+## Test Locally
+
+Run this Makefile command:
+
+```bash
+  make test
+```
+
 ## Screenshots
 
 ![diagram](diagram.png)

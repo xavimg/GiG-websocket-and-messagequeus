@@ -24,7 +24,7 @@ func RunServerWithOptions(opts *server.Options) *server.Server {
 }
 
 func TestNATSConnection(t *testing.T) {
-	_ = RunServerOnPort(TEST_PORT)
+	go RunServerOnPort(TEST_PORT)
 
 	nc, err := nats.Connect("nats://localhost:8369")
 	if err != nil {
@@ -34,7 +34,7 @@ func TestNATSConnection(t *testing.T) {
 }
 
 func TestWrongNATSConnection(t *testing.T) {
-	_ = RunServerOnPort(TEST_PORT)
+	go RunServerOnPort(TEST_PORT)
 
 	nc, err := nats.Connect("nats://localhost:8368")
 	if err == nil {
@@ -44,7 +44,7 @@ func TestWrongNATSConnection(t *testing.T) {
 }
 
 func TestPublishToNATS(t *testing.T) {
-	_ = RunServerOnPort(TEST_PORT)
+	go RunServerOnPort(TEST_PORT)
 
 	nc, err := nats.Connect("nats://localhost:8369")
 	if err != nil {
@@ -57,7 +57,7 @@ func TestPublishToNATS(t *testing.T) {
 }
 
 func TestPublishToNATSNoTopic(t *testing.T) {
-	_ = RunServerOnPort(TEST_PORT)
+	go RunServerOnPort(TEST_PORT)
 
 	nc, err := nats.Connect("nats://localhost:8369")
 	if err != nil {
@@ -69,7 +69,7 @@ func TestPublishToNATSNoTopic(t *testing.T) {
 }
 
 func TestPublishTopicExist(t *testing.T) {
-	_ = RunServerOnPort(TEST_PORT)
+	go RunServerOnPort(TEST_PORT)
 
 	nc, err := nats.Connect("nats://localhost:8369")
 	if err != nil {
@@ -100,7 +100,7 @@ func TestPublishTopicExist(t *testing.T) {
 }
 
 func TestPublishWrongTopicNotExists(t *testing.T) {
-	_ = RunServerOnPort(TEST_PORT)
+	go RunServerOnPort(TEST_PORT)
 
 	nc, err := nats.Connect("nats://localhost:8369")
 	if err != nil {

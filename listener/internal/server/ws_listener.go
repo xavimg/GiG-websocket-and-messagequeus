@@ -24,6 +24,9 @@ func (ws *WS) ServeHTTP() {
 	var upgrader = websocket.Upgrader{
 		ReadBufferSize:  1024,
 		WriteBufferSize: 1024,
+		CheckOrigin: func(r *http.Request) bool {
+			return true
+		},
 	}
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -32,7 +35,7 @@ func (ws *WS) ServeHTTP() {
 			log.Println("websocket connection upgrade: %w", err)
 		}
 		log.Println("ws connected!")
-		ws.listenWS(websocket)
+		go ws.listenWS(websocket)
 	})
 
 	log.Println("http listen on 3010")

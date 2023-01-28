@@ -16,7 +16,7 @@ type Service struct {
 func (s *Service) Run() error {
 	go s.WSPublisher.ServeHTTP()
 
-	s.MQSubscriber.Subscribe("Test")
+	s.MQSubscriber.Subscribe("GiG")
 	go s.WSPublisher.HandleWS()
 
 	for {

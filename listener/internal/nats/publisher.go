@@ -12,7 +12,6 @@ type MsgHandler struct {
 }
 
 func NewMsgHandler(natsURL string) *MsgHandler {
-	// Connect to a server
 	nc, err := nats.Connect(natsURL)
 	if err != nil {
 		log.Fatal(err)
@@ -21,7 +20,7 @@ func NewMsgHandler(natsURL string) *MsgHandler {
 
 	return &MsgHandler{
 		Nats:  nc,
-		Topic: "Test",
+		Topic: "GiG",
 	}
 }
 

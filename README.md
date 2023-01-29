@@ -35,8 +35,8 @@ Run this Makefile command:
 
 ## Demo using wscat
 
-1. Open a terminal and run this command **wscat -c localhost:3010** to connect with service listener throught websocket connection for send messages.
-2. Start your client subscriber demo with VSCode extension *live server*
+1. **IMPORTANT** Start your client subscriber demo. Go to the-core-tech-challenge/demo_subscriber and with VSCode extension *live server* open new one.
+2. Open a terminal and run this command **wscat -c localhost:3010** to connect with service listener throught websocket connection for send messages.
 3. Go to your terminal where we previous connect with **wscat -c localhost:3010** and you can start to write messages.
 4. Receive all sended messages in client demo subscribers.
 
@@ -45,12 +45,13 @@ Run this Makefile command:
 
 # Demo using browser console
 
-1. Open Google Chrome browser and inside console write:
+1. **IMPORTANT** Start your client subscriber demo. Go to the-core-tech-challenge/demo_subscriber and with VSCode extension *live server* open new one.
+
+2. Open Google Chrome browser and inside console write:
      ```
       let webSocket = new WebSocket('ws://localhost:3010');
       webSocket.send("test");
      ``` 
-2. Start your client subscriber demo with VSCode extension *live server*
 3. Receive all sended messages in client demo subscribers.
 
 ![demo](demo_browser.png)

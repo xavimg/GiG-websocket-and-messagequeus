@@ -13,7 +13,7 @@ This project involves **2 microservices** located in the same repository for eas
 Clone the project
 
 ```bash
-  git clone https://github.com/xavimg/GiG-websocket-and-messagequeus.git
+  git clone https://github.com/xavimg/The-Core-Tech-Challenge.git
 ```
 Run this Makefile command:
 

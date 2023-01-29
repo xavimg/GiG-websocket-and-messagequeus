@@ -1,30 +1,34 @@
 package nats
 
 import (
+	"gig-websockets-messagequeue/listener/internal/config"
 	"log"
 
 	"github.com/nats-io/nats.go"
 )
 
-type MsgHandler struct {
+type Publisher struct {
 	Nats  *nats.Conn
 	Topic string
 }
 
-func NewMsgHandler(natsURL string) *MsgHandler {
-	nc, err := nats.Connect(natsURL)
+func NewPublisher(url string) *Publisher {
+	nc, err := nats.Connect(url)
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Printf("Connected to NATS Server: %s\n", natsURL)
+	log.Printf("Connected to NATS ")
 
-	return &MsgHandler{
+	return &Publisher{
 		Nats:  nc,
-		Topic: "GiG",
+		Topic: config.Settings.NATS.Topic,
 	}
 }
 
-func (m *MsgHandler) Handle(msg []byte) {
-	log.Printf("publishing message to mq: %s", string(msg))
-	m.Nats.Publish(m.Topic, msg)
+func (m *Publisher) Handle(msg []byte) {
+	if err := m.Nats.Publish(m.Topic, msg); err != nil {
+		log.Println(err)
+	}
+
+	log.Printf("publishing message to NATS: %s", string(msg))
 }

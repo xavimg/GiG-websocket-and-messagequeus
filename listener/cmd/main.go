@@ -1,34 +1,39 @@
 package main
 
 import (
+	"gig-websockets-messagequeue/listener/internal/config"
 	"gig-websockets-messagequeue/listener/internal/nats"
 	"gig-websockets-messagequeue/listener/internal/server"
+	"log"
 )
 
 type Service struct {
-	MsgHandler *nats.MsgHandler
-	WS         *server.WS
+	WSL *server.WSListener
+	Pub *nats.Publisher
 }
 
-// Entry point of the service
 func (s *Service) Run() error {
-	go s.WS.ServeHTTP()
+	go s.WSL.ServeWS()
 
 	for {
 		select {
-		case msg := <-s.WS.WSCh:
-			s.MsgHandler.Handle(msg)
+		case msg := <-s.WSL.Message:
+			s.Pub.Handle(msg)
 		}
 	}
 }
 
 func main() {
-	ws := server.NewWS()
-	msgHandler := nats.NewMsgHandler("nats://nats:4222")
+	if err := config.ParseSettings(); err != nil {
+		log.Fatal(err)
+	}
+
+	wsl := server.NewWSListener()
+	pub := nats.NewPublisher(config.Settings.NATS.URL)
 
 	service := Service{
-		WS:         ws,
-		MsgHandler: msgHandler,
+		WSL: wsl,
+		Pub: pub,
 	}
 
 	service.Run()

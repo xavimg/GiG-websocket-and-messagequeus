@@ -2,21 +2,25 @@ version: '3'
 
 services:
 
-  notifier-service:
-    build:
-      context: .
-      dockerfile: notifier/Dockerfile
-    ports:
-      - "3011:3011"
-    networks:
-      - my_network
-  
   listener-service:
     build:
       context: .
       dockerfile: listener/Dockerfile
+    environment:
+      CONFIG_FILE: config/config.yml
     ports:
       - "3010:3010"
+    networks:
+      - my_network
+
+  notifier-service:
+    build:
+      context: .
+      dockerfile: notifier/Dockerfile
+    environment:
+      CONFIG_FILE: config/config.yml
+    ports:
+      - "3011:3011"
     networks:
       - my_network
   

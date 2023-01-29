@@ -1,0 +1,9 @@
+listener:
+  port: 3010
+
+notifier:
+  port: 3011
+
+nats:
+  url: nats://nats:4222
+  topic: GiG

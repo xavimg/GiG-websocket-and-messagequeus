@@ -6,28 +6,27 @@ import (
 	"github.com/nats-io/nats.go"
 )
 
-type MQSubscriber struct {
-	Nats  *nats.Conn
-	MQSCh chan *nats.Msg
+type Subscriber struct {
+	Nats    *nats.Conn
+	Message chan *nats.Msg
 }
 
-func NewMQSubsc(natsURL string) *MQSubscriber {
-	// Connect to a server
-	nc, err := nats.Connect(natsURL)
+func NewSubscriber(url string) *Subscriber {
+	client, err := nats.Connect(url)
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Printf("Connected to NATS Server: %s\n", natsURL)
+	log.Printf("Connected to NATS")
 
-	mqch := make(chan *nats.Msg)
-	return &MQSubscriber{
-		Nats:  nc,
-		MQSCh: mqch,
+	msg := make(chan *nats.Msg)
+	return &Subscriber{
+		Nats:    client,
+		Message: msg,
 	}
 }
 
-func (mqs *MQSubscriber) Subscribe(topic string) *nats.Subscription {
-	sub, err := mqs.Nats.ChanSubscribe(topic, mqs.MQSCh)
+func (mqs *Subscriber) Subscribe(topic string) *nats.Subscription {
+	sub, err := mqs.Nats.ChanSubscribe(topic, mqs.Message)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -35,7 +34,7 @@ func (mqs *MQSubscriber) Subscribe(topic string) *nats.Subscription {
 	return sub
 }
 
-func (mqs *MQSubscriber) Unsubscribe(sub *nats.Subscription) {
+func (mqs *Subscriber) Unsubscribe(sub *nats.Subscription) {
 	_ = sub.Unsubscribe()
 	mqs.Nats.Close()
 }

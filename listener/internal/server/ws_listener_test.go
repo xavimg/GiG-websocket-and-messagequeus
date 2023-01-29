@@ -1,7 +1,6 @@
 package server
 
 import (
-	"log"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -10,22 +9,11 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-var upgrader = websocket.Upgrader{
-	ReadBufferSize:  1024,
-	WriteBufferSize: 1024,
-	CheckOrigin: func(r *http.Request) bool {
-		return true
-	},
-}
-
 func TestHTTPUpgradedToWebSocket(t *testing.T) {
 	req, err := http.NewRequest("GET", "/", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
-
-	req.Header.Set("Connection", "Upgrade")
-	req.Header.Set("Upgrade", "websocket")
 
 	rr := httptest.NewRecorder()
 
@@ -33,12 +21,11 @@ func TestHTTPUpgradedToWebSocket(t *testing.T) {
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		_, err := upgrader.Upgrade(w, r, nil)
 		if err != nil {
-			log.Println("websocket connection upgrade: %w", err)
+			t.Fatal("websocket connection upgrade: %w", err)
 		}
-		log.Println("ws connected!")
 	})
 
-	go router.ServeHTTP(rr, req)
+	router.ServeHTTP(rr, req)
 
 	if status := rr.Code; status != 200 {
 		t.Errorf("Wrong status code: got %v, want %v", status, 200)

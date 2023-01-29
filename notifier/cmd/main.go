@@ -1,40 +1,46 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
+	"gig-websockets-messagequeue/notifier/internal/config"
 	"gig-websockets-messagequeue/notifier/internal/nats"
 	"gig-websockets-messagequeue/notifier/internal/server"
 )
 
 type Service struct {
-	WSPublisher  *server.WSPublisher
-	MQSubscriber *nats.MQSubscriber
+	WSN *server.WSNotifier
+	Sub *nats.Subscriber
 }
 
-// Entry point of the service
 func (s *Service) Run() error {
-	go s.WSPublisher.ServeHTTP()
+	go s.WSN.ServeWS()
 
-	s.MQSubscriber.Subscribe("GiG")
-	go s.WSPublisher.HandleWS()
+	fmt.Println(config.Settings.NATS.Topic)
+	s.Sub.Subscribe(config.Settings.NATS.Topic)
+	go s.WSN.HandleWS()
 
 	for {
 		select {
-		case msg := <-s.MQSubscriber.MQSCh:
-			log.Println("message through the message queue: ", string(msg.Data))
-			s.WSPublisher.WSPubCh <- msg.Data
+		case msg := <-s.Sub.Message:
+			log.Println("message from the message queue: ", string(msg.Data))
+			s.WSN.Message <- msg.Data
 		}
 	}
 }
 
 func main() {
-	ws := server.NewWSPublisher()
-	mq := nats.NewMQSubsc("nats://nats:4222")
+	if err := config.ParseSettings(); err != nil {
+		log.Fatal(err)
+	}
+
+	wsn := server.NewWSNotifier()
+	sub := nats.NewSubscriber(config.Settings.NATS.URL)
 
 	service := Service{
-		MQSubscriber: mq,
-		WSPublisher:  ws,
+		WSN: wsn,
+		Sub: sub,
 	}
 
 	service.Run()

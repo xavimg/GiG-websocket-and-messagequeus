@@ -18,7 +18,7 @@ func (s *Service) Run() error {
 	for {
 		select {
 		case msg := <-s.WSL.Message:
-			s.Pub.Handle(msg)
+			s.Pub.Publish(msg)
 		}
 	}
 }

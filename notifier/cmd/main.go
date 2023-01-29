@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	"gig-websockets-messagequeue/notifier/internal/config"
@@ -17,9 +16,7 @@ type Service struct {
 func (s *Service) Run() error {
 	go s.WSN.ServeWS()
 
-	fmt.Println(config.Settings.NATS.Topic)
-	s.Sub.Subscribe(config.Settings.NATS.Topic)
-	go s.WSN.HandleWS()
+	go s.Sub.Subscribe(config.Settings.NATS.Topic)
 
 	for {
 		select {

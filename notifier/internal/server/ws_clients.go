@@ -30,25 +30,28 @@ func NewWSNotifier() *WSNotifier {
 	}
 }
 
-func (wsp *WSNotifier) ServeWS() {
+func (wsn *WSNotifier) ServeWS() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		websocket, err := upgrader.Upgrade(w, r, nil)
 		if err != nil {
 			log.Println("upgrade connection err: %w", err)
 		}
-		log.Printf("New client connected to listener --> %s", websocket.RemoteAddr())
-		wsp.WSClients = append(wsp.WSClients, websocket)
+
+		log.Printf("New client connected to notifier --> %s", websocket.RemoteAddr())
+		wsn.WSClients = append(wsn.WSClients, websocket)
+
+		go wsn.handleMessages()
 	})
 
 	http.ListenAndServe(fmt.Sprintf(":%s", config.Settings.Notifier.Port), nil)
 }
 
-func (wsp *WSNotifier) HandleWS() {
-	for msgPayload := range wsp.Message {
-		for i, client := range wsp.WSClients {
+func (wsn *WSNotifier) handleMessages() {
+	for msgPayload := range wsn.Message {
+		for i, client := range wsn.WSClients {
 			if err := client.WriteMessage(websocket.TextMessage, msgPayload); err != nil {
 				log.Println(err)
-				wsp.removeWSClient(i)
+				wsn.removeWSClient(i)
 				err = client.Close()
 				log.Println(err)
 			}

@@ -29,7 +29,7 @@ func NewWSListener() *WSListener {
 	}
 }
 
-func (ws *WSListener) ServeWS() {
+func (wsl *WSListener) ServeWS() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		websocket, err := upgrader.Upgrade(w, r, nil)
 		if err != nil {
@@ -38,13 +38,13 @@ func (ws *WSListener) ServeWS() {
 
 		log.Println(fmt.Sprintf("New client connected to listener --> %s", websocket.RemoteAddr()))
 
-		go ws.handleMessages(websocket)
+		go wsl.handleMessages(websocket)
 	})
 
 	http.ListenAndServe(fmt.Sprintf(":%s", config.Settings.Listener.Port), nil)
 }
 
-func (ws *WSListener) handleMessages(conn *websocket.Conn) {
+func (wsl *WSListener) handleMessages(conn *websocket.Conn) {
 	for {
 		messageType, messageContent, err := conn.ReadMessage()
 		if err != nil {
@@ -52,7 +52,7 @@ func (ws *WSListener) handleMessages(conn *websocket.Conn) {
 			return
 		}
 
-		ws.Message <- messageContent
+		wsl.Message <- messageContent
 
 		if err := conn.WriteMessage(messageType, []byte(fmt.Sprintf("Your message is: %s. Time received : %v", messageContent, time.Now()))); err != nil {
 			log.Println(err)

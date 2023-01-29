@@ -17,6 +17,7 @@ func NewPublisher(url string) *Publisher {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	log.Printf("Connected to NATS ")
 
 	return &Publisher{
@@ -25,7 +26,7 @@ func NewPublisher(url string) *Publisher {
 	}
 }
 
-func (m *Publisher) Handle(msg []byte) {
+func (m *Publisher) Publish(msg []byte) {
 	if err := m.Nats.Publish(m.Topic, msg); err != nil {
 		log.Println(err)
 	}

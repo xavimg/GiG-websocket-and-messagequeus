@@ -12,15 +12,16 @@ type Subscriber struct {
 }
 
 func NewSubscriber(url string) *Subscriber {
-	client, err := nats.Connect(url)
+	nc, err := nats.Connect(url)
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	log.Printf("Connected to NATS")
 
 	msg := make(chan *nats.Msg)
 	return &Subscriber{
-		Nats:    client,
+		Nats:    nc,
 		Message: msg,
 	}
 }
@@ -30,6 +31,7 @@ func (mqs *Subscriber) Subscribe(topic string) *nats.Subscription {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	log.Printf("subscribed to %s\n", topic)
 	return sub
 }

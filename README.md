@@ -46,8 +46,10 @@ Run this Makefile command:
 # Demo using browser console
 
 1. Open Google Chrome browser and inside console write:
+     ```
       let webSocket = new WebSocket('ws://localhost:3010');
       webSocket.send("test");
+     ``` 
 2. Start your client subscriber demo with VSCode extension *live server*
 3. Receive all sended messages in client demo subscribers.
 

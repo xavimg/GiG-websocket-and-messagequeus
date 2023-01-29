@@ -25,7 +25,7 @@ func TestHTTPUpgradedToWebSocket(t *testing.T) {
 		}
 	})
 
-	router.ServeHTTP(rr, req)
+	go router.ServeHTTP(rr, req)
 
 	if status := rr.Code; status != 200 {
 		t.Errorf("Wrong status code: got %v, want %v", status, 200)

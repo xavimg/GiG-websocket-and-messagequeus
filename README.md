@@ -1,5 +1,5 @@
 
-# GiG - Core-tech 
+# GiG  -  Core-tech 
 
 This project involves **2 microservices** located in the same repository for ease of testing. The **communication between** **clients** and the **services** is done using the **WebSocket** **protocol**, and the **communication between** the **2 services** is done using **NATS as a message queue**. 
 
